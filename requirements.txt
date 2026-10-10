@@ -1,0 +1,2 @@
+# Add your project dependencies here
+# Example: pygame==2.1.3
