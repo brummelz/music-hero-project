@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cover – Start screen</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a.start{position:absolute;left:32.4%;top:79.6%;width:35.5%;height:9.5%;border-radius:999px}
+a.start:hover{background:rgba(255,255,255,0.12)}
+a.start:focus-visible{outline:4px solid #FFC93C;outline-offset:3px}
+</style>
+</helmet>
+<div style="position:relative;width:1100px;height:822px;overflow:hidden;background:#E9F3FF">
+<img src="assets/cover.jpg" alt="Horn Hero, the musical adventure: a happy child plays a French horn while the notes Do, Ré and Mi float away on a staff." style="display:block;width:1100px;height:822px;object-fit:cover">
+<a class="start" href="Home.dc.html" aria-label="Start Game"></a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":822}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
