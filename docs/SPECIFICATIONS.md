@@ -1,6 +1,6 @@
 # Functional Specifications: Horn Hero (working title)
 
-Status: Draft v0.1. Requirement IDs (`FR-*`, `NFR-*`) are referenced by [TEST_CASES.md](TEST_CASES.md).
+Status: Draft v0.2. Requirement IDs (`FR-*`, `NFR-*`) are referenced by [TEST_CASES.md](TEST_CASES.md).
 
 ## 1. Overview
 
@@ -19,7 +19,7 @@ Horn Hero is an offline, educational desktop app for young children learning a m
 
 - **FR-02** The system converts detected fundamental frequency `f` to cents relative to the target frequency `f_t`: `cents = 1200 · log2(f / f_t)`.
 - **FR-03** The tuner bar has three zones:
-  - **Green (in tune):** |cents| ≤ tolerance. Default tolerance ±15 cents, configurable.
+  - **Green (in tune):** |cents| ≤ tolerance. The tolerance is a user setting (FR-21); default ±15 cents.
   - **Flat side:** cents < −tolerance (yellow near, red far).
   - **Sharp side:** cents > +tolerance (yellow near, red far).
 - **FR-04** The needle position updates in real time (see NFR-01) and is clamped to the gauge range.
@@ -47,17 +47,37 @@ Horn Hero is an offline, educational desktop app for young children learning a m
 
 ### Mode 2: Level Challenge
 
-- **FR-15** Levels have increasing difficulty. **Level 1:** Do, Ré, Mi (written C4, D4, E4). **Level 2+:** progressively adds Fa, Sol, La, and so on (full level table to be defined; see §8).
-- **FR-16** The game prompts a note from the current level's note set; the child holds it for 3 s; the game awards points/stars and moves to the next note in the sequence.
-- **FR-17** Completing a level unlocks the next one and records a star rating (rating rules: see §8).
+- **FR-15** Levels have increasing difficulty and use the note sets in §4.1.
+- **FR-16** A level consists of **6 prompts**. Prompts are drawn from the level's note set so that every note appears at least once, with no note repeated twice in a row. For each prompt the child holds the note for 3 s (1 point), then the game moves to the next prompt. A level is complete after 6 successful holds. There is no failure state: the child can keep trying a prompt indefinitely.
+- **FR-17** Completing a level unlocks the next one and records a star rating (§4.2). Only the best rating per level is kept.
+
+### 4.1 Level table (Horn in F)
+
+Notes are written pitch; sounding frequency is given for Horn in F (FR-19).
+
+| Level | Theme | Written notes (solfège) | Sounding frequencies (Hz) |
+|-------|-------|-------------------------|---------------------------|
+| 1 | First notes | C4 Do, D4 Ré, E4 Mi | 174.61, 196.00, 220.00 |
+| 2 | Five-note scale | C4 Do, D4 Ré, E4 Mi, F4 Fa, G4 Sol | 174.61, 196.00, 220.00, 233.08, 261.63 |
+| 3 | Full octave | C4 Do, D4 Ré, E4 Mi, F4 Fa, G4 Sol, A4 La, B4 Si, C5 Do | 174.61, 196.00, 220.00, 233.08, 261.63, 293.66, 329.63, 349.23 |
+| 4 | Upper register | C5 Do, D5 Ré, E5 Mi, F5 Fa, G5 Sol | 349.23, 392.00, 440.00, 466.16, 523.25 |
+| 5 | Leaps | C4 Do, G4 Sol, C5 Do, E5 Mi, G5 Sol | 174.61, 261.63, 349.23, 440.00, 523.25 |
+
+Levels beyond 5 are out of scope for v1. The level table is data (configuration), not code, so it can be extended. Written notes stay the same across transposition profiles; sounding frequencies follow FR-19.
+
+### 4.2 Star rating (assumptions)
+
+- **FR-22** A *miss* is counted each time the hold timer is reset by leaving the Green zone after it has started (a reset per FR-07/FR-08). Silence before playing does not count.
+- **FR-23** Stars for a completed level, based on total misses during the level: **3 stars** for 0–2 misses, **2 stars** for 3–6 misses, **1 star** for 7 or more. Completing a level always gives at least 1 star. In pause mode (FR-07), a miss is counted the first time the timer is paused within a prompt.
+- **FR-24** Practice Mode awards no stars; it only counts points toward the 10-point goal. The header's total stars is the sum of each level's best stars (max 15 for 5 levels).
 
 ## 5. Screens
 
 ### Screen 1: Mode and instrument selection
 
-- **Header:** logo, current profile, total stars/score, active instrument indicator (Horn in F).
+- **Header:** logo, total stars/score, active instrument indicator (Horn in F).
 - **Mode cards:** Practice (pick Do, Ré, Mi, ...) and Adventure (level map with unlocked levels and star ratings).
-- **Settings:** microphone sensitivity calibration, transposition profile toggle, audio volume.
+- **Settings:** microphone sensitivity calibration, transposition profile toggle, audio volume, tuning tolerance (FR-21), reset progress (FR-25).
 
 ### Screen 2: Gameplay
 
@@ -77,6 +97,8 @@ Horn Hero is an offline, educational desktop app for young children learning a m
   - hold-timer state machine (FR-06..FR-09).
 - **FR-19** Sounding frequency: `f = 440 · 2^((m − 69 + offset) / 12)`, where `m` is the written MIDI note number and `offset` the profile semitone offset (Horn in F: −7).
 - **FR-20 (Storage)** User progress, unlocked levels, stars, and calibration settings are stored locally and persist across restarts.
+- **FR-21 (Tolerance setting)** The tuning tolerance is a persisted setting (FR-20). Presets: **Easy ±25 cents, Normal ±15 cents (default), Strict ±10 cents**, plus a custom value from ±5 to ±50 cents. A change applies immediately to the Green zone and hold-timer logic in both game modes.
+- **FR-25 (Profile)** The app has a **single local profile** per install (no profile selection or login). Progress, stars, and settings belong to it. A "reset progress" action in Settings clears progress and stars after a confirmation.
 - **NFR-01** End-to-end latency from sound to gauge update should be ≤ 100 ms (target; to be validated).
 - **NFR-02** Detection should be accurate to within ±5 cents for clean sustained tones in the horn's range.
 
@@ -89,11 +111,19 @@ Horn Hero is an offline, educational desktop app for young children learning a m
 | E4 | Mi | 64 | A3 | 57 | 220.00 |
 | C5 | Do | 72 | F4 | 65 | 349.23 |
 
-## 8. Open questions
+## 8. Decisions and remaining open questions
 
-1. Level 2+ note sets and the star rating rules (e.g. by time or number of attempts) are not yet defined.
-2. Default tolerance is ±15 cents; is this too strict or too loose for beginners (perhaps wider at Level 1)?
-3. Reset vs. pause default on pitch loss (this spec defaults to reset, matching TC-04).
-4. Written C4 is a very low note on horn and hard for beginners; confirm the starting range is intended.
-5. Profiles: a single local profile or multiple children per install?
-6. Octave errors: should a detected octave-off note count as wrong? (Assumed: wrong.)
+Decided:
+
+- Level 2+ note sets: §4.1.
+- Star rating: miss-based, §4.2 (assumptions, tunable after playtesting).
+- Tolerance is a user setting (FR-21), default ±15 cents.
+- Written C4 stays as the lowest starting note for now.
+- Octave-off notes count as wrong (not Green).
+- Single profile per install (FR-25).
+
+Open:
+
+1. Star thresholds (0–2 / 3–6 / 7+ misses) and the 6-prompt level length are assumptions to validate with real children.
+2. Levels 4 and 5 reach written G5, which is demanding for beginners; confirm or lower the range.
+3. Should the pause-on-loss behavior (FR-07) be exposed in Settings, or remain a developer option?
