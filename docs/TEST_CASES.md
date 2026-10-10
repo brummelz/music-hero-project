@@ -49,6 +49,8 @@ Traces to [SPECIFICATIONS.md](SPECIFICATIONS.md). All cases are automatable with
 | TC-36 | Practice has no stars | FR-24 | Complete a 10-point practice session | Total stars unchanged |
 | TC-37 | Single profile | FR-25 | Launch fresh and after a restart | No profile selection; same progress shown |
 | TC-38 | Reset progress | FR-25 | Reset progress: cancel, then confirm | Cancel keeps data; confirm clears progress and stars, only Level 1 unlocked |
+| TC-39 | Counter starts on entering range | FR-06 | Silence, then at t = 2.0 s the correct note enters the Green zone and stays | Timer is 0 until t = 2.0 s, starts at that instant, completes at t = 5.0 s (±1 detection frame), 1 point |
+| TC-40 | Wrong note does not start counter | FR-06 | A different note (not the target, including octave-off) sustained for 5 s | Timer stays 0, no point |
 
 ## Notes
 

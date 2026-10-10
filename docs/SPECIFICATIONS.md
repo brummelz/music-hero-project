@@ -27,7 +27,7 @@ Horn Hero is an offline, educational desktop app for young children learning a m
 
 ### 3.2 Hold timer and scoring
 
-- **FR-06** While the pitch stays in the Green zone, a progress ring fills over **3.0 continuous seconds** (configurable constant).
+- **FR-06** The player must hold the **correct note** (correct octave) inside the Green zone for **3.0 continuous seconds** (configurable constant). The counter **starts as soon as the pitch enters the Green zone**, with no extra delay or trigger, and the progress ring fills (with the elapsed time visible) for as long as the pitch stays in range.
 - **FR-07** If the pitch leaves the Green zone before completion, the timer **resets to 0** (default). A configurable "pause" behavior is supported as an alternative.
 - **FR-08** Brief detection dropouts shorter than a grace period (default 150 ms) do not count as leaving the zone, so momentary detector glitches don't frustrate the child.
 - **FR-09** Completing the hold awards **1 point**, plays a sound effect, and resets the timer for the next attempt.
