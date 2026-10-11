@@ -17,11 +17,19 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from core.hold_timer import HoldMode
 from core.levels import Level
 from core.notes import Note
 from core.profile import Progress
 from ui import theme
 from ui.widgets import HoldButton, StarRow
+
+# FR-07: the Easy / Hard switch picks the hold mode.
+_DIFFICULTIES = ((HoldMode.PAUSE, "🙂  Easy"), (HoldMode.RESET, "🔥  Hard"))
+_DIFFICULTY_HINTS = {
+    HoldMode.PAUSE: "Easy: if the note slips, your progress stays.",
+    HoldMode.RESET: "Hard: if the note slips, the hold starts again.",
+}
 
 
 def _passive(widget: QWidget) -> QWidget:
@@ -60,6 +68,7 @@ class HomeScreen(QWidget):
     practice_requested = Signal(object)  # Note
     level_requested = Signal(int)
     settings_requested = Signal()
+    hold_mode_requested = Signal(object)  # HoldMode
 
     def __init__(
         self, practice_notes: Sequence[Note], levels: Sequence[Level], parent: QWidget | None = None
@@ -78,6 +87,7 @@ class HomeScreen(QWidget):
         question.setFont(theme.display_font(38))
         question.setAlignment(Qt.AlignmentFlag.AlignCenter)
         root.addWidget(question)
+        root.addLayout(self._build_difficulty())
 
         cards = QHBoxLayout()
         cards.setSpacing(24)
@@ -118,6 +128,33 @@ class HomeScreen(QWidget):
         settings.held.connect(self.settings_requested)
         header.addWidget(settings)
         return header
+
+    def _build_difficulty(self) -> QVBoxLayout:
+        layout = QVBoxLayout()
+        layout.setSpacing(6)
+        switch = QFrame()
+        switch.setObjectName("difficultySwitch")
+        row = QHBoxLayout(switch)
+        row.setContentsMargins(5, 5, 5, 5)
+        row.setSpacing(4)
+        self._difficulty_group = QButtonGroup(self)
+        self._difficulty_buttons: dict[HoldMode, QPushButton] = {}
+        for mode, text in _DIFFICULTIES:
+            button = QPushButton(text)
+            button.setObjectName("difficulty")
+            button.setCheckable(True)
+            button.setFont(theme.display_font(20))
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            button.clicked.connect(lambda _checked=False, m=mode: self.hold_mode_requested.emit(m))
+            self._difficulty_group.addButton(button)
+            self._difficulty_buttons[mode] = button
+            row.addWidget(button)
+        layout.addWidget(switch, 0, Qt.AlignmentFlag.AlignHCenter)
+        self._difficulty_hint = QLabel()
+        self._difficulty_hint.setObjectName("muted")
+        self._difficulty_hint.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self._difficulty_hint)
+        return layout
 
     def _build_practice_card(self) -> QFrame:
         card = QFrame()
@@ -187,7 +224,9 @@ class HomeScreen(QWidget):
         if index >= 0:
             self.practice_requested.emit(self._practice_notes[index])
 
-    def refresh(self, progress: Progress, instrument_name: str) -> None:
+    def refresh(self, progress: Progress, instrument_name: str, hold_mode: HoldMode) -> None:
+        self._difficulty_buttons[hold_mode].setChecked(True)
+        self._difficulty_hint.setText(_DIFFICULTY_HINTS[hold_mode])
         max_stars = 3 * len(self._levels)
         self._stars.setText(f"★  {progress.total_stars} / {max_stars}")
         self._stars.setAccessibleName(f"{progress.total_stars} of {max_stars} stars earned")

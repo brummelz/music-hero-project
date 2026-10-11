@@ -12,7 +12,7 @@ from PySide6.QtWidgets import QMainWindow, QStackedWidget
 
 from audio.devices import InputDevice, list_input_devices
 from audio.sources import AudioSource, MicrophoneSource
-from core.hold_timer import HoldConfig
+from core.hold_timer import HoldConfig, HoldMode
 from core.levels import Level
 from core.notes import Note
 from core.profile import Profile, Settings
@@ -59,6 +59,7 @@ class MainWindow(QMainWindow):
         self._home.practice_requested.connect(self._start_practice)
         self._home.level_requested.connect(self._start_level)
         self._home.settings_requested.connect(self._open_settings)
+        self._home.hold_mode_requested.connect(self._set_hold_mode)
         self._game.back_requested.connect(self._leave_game)
         self._game.settings_requested.connect(self._open_settings)
         self._game.session_finished.connect(self._on_session_finished)
@@ -107,7 +108,7 @@ class MainWindow(QMainWindow):
         return HoldConfig(mode=self._settings.hold_mode)
 
     def _show_home(self) -> None:
-        self._home.refresh(self._profile.progress, self._settings.instrument)
+        self._home.refresh(self._profile.progress, self._settings.instrument, self._settings.hold_mode)
         self._stack.setCurrentWidget(self._home)
 
     def _start_game(self, session: GameSession, caption: str, replay: Callable[[], None]) -> None:
@@ -167,6 +168,10 @@ class MainWindow(QMainWindow):
             self._show_home()
         elif in_game:
             self._game.resume()
+
+    def _set_hold_mode(self, hold_mode: HoldMode) -> None:
+        self._apply_settings(replace(self._settings, hold_mode=hold_mode))
+        self._show_home()
 
     def _apply_settings(self, settings: Settings) -> None:
         if settings.input_device != self._settings.input_device:

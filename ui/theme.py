@@ -108,6 +108,13 @@ QPushButton#note {{
 QPushButton#note:hover {{ border-color: {ACCENT_LINE}; }}
 QPushButton#note:checked {{ background: {ACCENT_SOFT}; border-color: {ACCENT}; }}
 
+QFrame#difficultySwitch {{ background: white; border: 3px solid {BORDER}; border-radius: 32px; }}
+QPushButton#difficulty {{
+    background: transparent; color: {MUTED}; border: none; border-radius: 24px;
+    min-height: 48px; min-width: 120px; padding: 0 22px;
+}}
+QPushButton#difficulty:checked {{ background: {ACCENT}; color: white; }}
+
 QPushButton#level {{
     background: white; border: 3px solid {BORDER}; border-radius: 26px;
     min-height: 52px; text-align: left;

@@ -8,7 +8,6 @@ from dataclasses import replace
 
 from PySide6.QtCore import Qt, QTimer, Signal
 from PySide6.QtWidgets import (
-    QCheckBox,
     QComboBox,
     QDialog,
     QFormLayout,
@@ -26,7 +25,6 @@ from PySide6.QtWidgets import (
 from audio.devices import AUTOMATIC, SYSTEM_DEFAULT, InputDevice
 from audio.sources import AudioSource
 from audio.tracker import PitchTracker
-from core.hold_timer import HoldMode
 from core.notes import midi_label
 from core.profile import Settings
 from core.transpose import PROFILES, nearest_written_note, profile_by_name
@@ -102,8 +100,6 @@ class SettingsDialog(QDialog):
         for profile in PROFILES:
             self._instrument.addItem(profile.name)
         playing.addRow("Instrument", self._instrument)
-        self._pause = QCheckBox("Keep progress when the note slips (pause, don't restart)")
-        playing.addRow("Hold timer", self._pause)
 
         root.addWidget(_section("Microphone"))
         microphone = self._form(root)
@@ -182,7 +178,6 @@ class SettingsDialog(QDialog):
             self._device.currentIndexChanged,
             self._volume.valueChanged,
             self._sensitivity.valueChanged,
-            self._pause.toggled,
         ):
             signal.connect(self._on_changed)
 
@@ -212,7 +207,6 @@ class SettingsDialog(QDialog):
         self._device.setCurrentIndex(device_index)
         self._volume.setValue(round(settings.volume * 100))
         self._sensitivity.setValue(round(settings.mic_sensitivity * 100))
-        self._pause.setChecked(settings.hold_mode is HoldMode.PAUSE)
 
     def _on_changed(self) -> None:
         preset = self._preset.currentData()
@@ -230,7 +224,6 @@ class SettingsDialog(QDialog):
             input_device=str(self._device.currentData() or ""),
             volume=self._volume.value() / 100,
             mic_sensitivity=self._sensitivity.value() / 100,
-            hold_mode=HoldMode.PAUSE if self._pause.isChecked() else HoldMode.RESET,
         )
         self._tracker.set_sensitivity(self._settings.mic_sensitivity)
         self._tracker.reset()
