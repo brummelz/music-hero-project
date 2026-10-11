@@ -73,6 +73,15 @@ Rules:
 - Don't commit or push unless asked.
 - When requirements are ambiguous, check the "Open" questions in spec §8 and ask rather than guess.
 
+## Child UX review (required when testing the app)
+
+- Whenever you test, run, or change anything the child sees (screens, widgets, theme, feedback, messages, sounds), use the `child-ux-reviewer` sub agent ([.claude/agents/child-ux-reviewer.md](.claude/agents/child-ux-reviewer.md)) before finishing.
+- It reviews as a child of a given age band: 3-5, 6-8, 9-12, 12-15. Pass the bands explicitly; if the change is not age-specific, review all four (run them in parallel).
+- Give it the thing to review: the running app or screenshots, the mockups in `docs/design/`, or the changed files in `ui/`.
+- Reports are written to `docs/ux-reviews/`. Fix every Blocker. Triage Major and Minor findings with the user.
+- If a finding conflicts with the spec, flag it and update the docs first. Do not change behavior silently.
+- Automated tests do not replace this review, and this review does not replace the tests in "Workflow".
+
 ## Child-facing UX constraints
 
 - No failure state: the child can retry indefinitely (FR-16). Never show punishing or negative messaging.
