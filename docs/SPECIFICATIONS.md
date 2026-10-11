@@ -102,6 +102,15 @@ Levels beyond 5 are out of scope for v1. The level table is data (configuration)
 - **NFR-01** End-to-end latency from sound to gauge update should be ≤ 100 ms (target; to be validated).
 - **NFR-02** Detection should be accurate to within ±5 cents for clean sustained tones in the horn's range.
 
+### 6.1 Web version (branch `html-version`)
+
+A browser version runs the same rules (FR-01 to FR-25) on computers, tablets and phones. The desktop `.exe` stays the primary target.
+
+- **Platform:** static HTML + JavaScript in `web/`, published with GitHub Pages. It is installable as a Progressive Web App and works offline after the first visit.
+- **Audio input:** `getUserMedia` with echo cancellation, noise suppression and automatic gain control turned off, because voice processing removes sustained instrument tones. The user can choose the microphone in Settings.
+- **Storage (FR-20):** the single local profile (FR-25) is kept in the browser's `localStorage`, using the same JSON shape as the desktop app.
+- **Start:** browsers allow audio only after a user action, so the cover's "Start Game!" button also asks for microphone permission. If permission is refused, the app explains how to allow it and offers a retry. It never shows a failure state (FR-16).
+
 ## 7. Reference pitch table (Horn in F)
 
 | Written | Solfège | Written MIDI | Sounding | Sounding MIDI | Frequency (Hz) |

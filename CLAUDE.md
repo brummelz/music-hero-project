@@ -27,7 +27,12 @@ audio/     microphone capture + pitch detectors (hardware boundary)
 storage/   local persistence (progress, settings)
 ui/        screens and widgets (Qt)
 main.py    composition root: wires the layers together
+web/       browser version (spec §6.1), same layering in JavaScript:
+           web/js/core (pure, like core/), web/js/audio, web/js/storage, web/js/ui, web/js/app.js
 ```
+
+- `web/js/core` follows the same rules as `core/`: no DOM, no Web Audio, no storage, time passed in. Keep it a faithful port of `core/`; when a rule changes, change both and their tests.
+- Web tests: `npm test` (runs `node --test "web/tests/*.test.js"`, no npm dependencies). `web/data/levels.json` must match `resources/levels.json` (a test checks this).
 
 Rules:
 
