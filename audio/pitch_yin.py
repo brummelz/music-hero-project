@@ -18,6 +18,10 @@ DEFAULT_FALLBACK_THRESHOLD = 0.4
 """Second, looser pass for noisy rooms and breathy tones; the tracker's median filter
 removes the occasional octave error this lets through."""
 
+DIP_SEARCH_RATIO = 1.15
+"""After the first dip, take the deepest point within 15% of it: in noisy rooms false dips on
+the way down read sharp. Octave errors (a factor of 2) stay far outside this range."""
+
 # Mic sensitivity 0..1 maps to an RMS noise gate from 0.01 (-40 dBFS, loud input only)
 # down to 0.0001 (-80 dBFS). The default 0.5 gates at 0.001 (-60 dBFS): low, because the
 # detector already rejects unpitched room noise, and laptop mics are often quiet.
@@ -104,9 +108,8 @@ class YinDetector:
         if len(below) == 0:
             return None
         tau = tau_min + int(below[0])
-        while tau + 1 < tau_max and cmnd[tau + 1] < cmnd[tau]:
-            tau += 1
-        return tau
+        end = min(tau_max, int(tau * DIP_SEARCH_RATIO) + 1)
+        return tau + int(np.argmin(cmnd[tau:end]))
 
     @staticmethod
     def _parabolic_peak(values: npt.NDArray[np.float64], index: int) -> float:
