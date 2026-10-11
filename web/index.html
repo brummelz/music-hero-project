@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#4338CA">
+  <meta name="description" content="Horn Hero: learn to play the French Horn in tune.">
+  <title>Horn Hero</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="stylesheet" href="css/app.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+
+<!-- Cover: the illustration with its own Start Game button; starting also asks for the microphone. -->
+<section id="cover" class="screen cover">
+  <div class="cover-frame">
+    <img src="assets/cover.jpg" alt="Horn Hero, the musical adventure: a happy child plays a French horn while the notes Do, Ré and Mi float away on a staff." width="1600" height="1195">
+    <button id="start" class="cover-button" type="button">Start Game!</button>
+    <div id="cover-busy" class="cover-button cover-busy" hidden>Warming up the horn…</div>
+  </div>
+  <div id="mic-help" class="mic-help" role="alertdialog" aria-labelledby="mic-help-title" hidden>
+    <h2 id="mic-help-title">Let Horn Hero hear you</h2>
+    <p id="mic-help-text">Horn Hero needs the microphone to hear your notes. Tap “Try again” and choose <b>Allow</b>.</p>
+    <p class="muted">If no question appears, open the browser's site settings (the lock icon next to the address) and allow the microphone.</p>
+    <button id="mic-retry" class="primary" type="button">Try again</button>
+  </div>
+</section>
+
+<!-- Home: mode selection (spec Screen 1). -->
+<section id="home" class="screen home" hidden>
+  <header class="home-header">
+    <div class="brand"><span class="logo" aria-hidden="true">♪</span><h1>Horn Hero</h1></div>
+    <div class="header-pills">
+      <span id="total-stars" class="pill pill-stars"></span>
+      <span id="instrument" class="pill pill-outline"></span>
+      <button class="round settings-button" type="button" aria-label="Settings (hold)" data-hint="Hold to open settings">⚙&#xFE0E;</button>
+    </div>
+  </header>
+  <h2 class="question">What do you want to play today?</h2>
+  <div class="mode-cards">
+    <article class="card">
+      <div class="card-header"><span class="icon-circle yellow" aria-hidden="true">♪</span>
+        <div><h3>Practice</h3><p class="muted">Pick one note and play it 10 times.</p></div></div>
+      <div id="practice-notes" class="note-choices" role="radiogroup" aria-label="Note to practise"></div>
+      <p class="hint-box">Hold the note steady for 3 seconds to score a point.</p>
+      <button id="start-practice" class="primary wide" type="button">Start practice</button>
+    </article>
+    <article class="card">
+      <div class="card-header"><span class="icon-circle green" aria-hidden="true">⚑</span>
+        <div><h3>Adventure</h3><p class="muted">Finish levels and collect stars.</p></div></div>
+      <ol id="level-list" class="level-list"></ol>
+    </article>
+  </div>
+</section>
+
+<!-- Gameplay (spec Screen 2). -->
+<section id="game" class="screen game" hidden>
+  <div class="top-bar">
+    <button id="back" class="round" type="button" aria-label="Back">←</button>
+    <div class="target">
+      <span id="caption" class="caption"></span>
+      <div class="target-row">
+        <span id="note-label" class="note-label"></span>
+        <button id="listen" class="round" type="button" aria-label="Hear the note" title="Hear the note">🔊&#xFE0E;</button>
+      </div>
+    </div>
+    <div class="top-right">
+      <button class="round settings-button" type="button" aria-label="Settings (hold)" data-hint="Hold to open settings">⚙&#xFE0E;</button>
+      <div id="score" class="score-pill" role="status"></div>
+    </div>
+  </div>
+  <div class="card staff-card">
+    <div class="staff-captions"><span id="staff-caption"></span><span id="hold-caption"></span></div>
+    <div id="staff" class="staff"></div>
+  </div>
+  <div id="gauge" class="card gauge-card"></div>
+  <div id="feedback" class="feedback" data-feedback="silence" role="status" aria-live="polite">
+    <span id="feedback-icon" class="feedback-icon" aria-hidden="true"></span>
+    <span id="feedback-text" class="feedback-text"></span>
+    <span id="feedback-info" class="feedback-info"></span>
+  </div>
+  <div id="sim-pad" class="sim-pad" hidden>
+    <span class="muted">Simulation:</span>
+    <button type="button" data-sim="-35">↓ Flat</button>
+    <button type="button" data-sim="3">In tune</button>
+    <button type="button" data-sim="35">↑ Sharp</button>
+    <span class="muted sim-keys">or hold Space / ↑ / ↓</span>
+  </div>
+</section>
+
+<!-- Celebration when a practice session or level is complete (FR-14, FR-17). -->
+<section id="summary" class="screen summary" hidden>
+  <div class="card summary-card">
+    <h2 id="summary-title"></h2>
+    <div id="summary-stars" class="summary-stars"></div>
+    <div id="summary-points" class="summary-points"></div>
+    <p id="summary-message" class="summary-message muted"></p>
+    <p id="summary-unlocked" class="unlocked" hidden></p>
+    <div class="summary-buttons">
+      <button id="summary-home" class="secondary" type="button">Home</button>
+      <button id="summary-again" class="secondary" type="button">Play again</button>
+      <button id="summary-next" class="primary" type="button">Next level</button>
+    </div>
+  </div>
+</section>
+
+<!-- Settings for a grown-up (FR-21, FR-25). -->
+<dialog id="settings" class="settings" aria-labelledby="settings-title">
+  <form method="dialog">
+    <h2 id="settings-title">Settings</h2>
+    <p class="muted">For grown-ups. Changes are saved straight away.</p>
+
+    <h3>Playing</h3>
+    <label class="field"><span>How exact the note must be</span>
+      <span class="field-row">
+        <select id="set-preset"></select>
+        <input id="set-custom" type="number" min="5" max="50" step="1" aria-label="Custom tolerance in cents">
+      </span>
+    </label>
+    <label class="field"><span>Instrument</span><select id="set-instrument"></select></label>
+    <label class="check"><input id="set-pause" type="checkbox"> Keep progress when the note slips (pause, don't restart)</label>
+
+    <h3>Microphone</h3>
+    <label class="field"><span>Microphone</span><select id="set-mic"></select></label>
+    <label class="field"><span>Sensitivity</span><input id="set-sensitivity" type="range" min="0" max="100"></label>
+    <div class="field"><span>Live test</span>
+      <span class="field-row"><span class="meter"><span id="set-meter"></span></span><span id="set-gate" class="gate"></span></span>
+    </div>
+    <div class="field"><span>Hearing</span><span id="set-heard" class="heard">—</span></div>
+    <p id="set-in-use" class="muted small"></p>
+    <p id="set-filtered" class="warning" hidden>⚠ This microphone still filters sound, so steady notes may fade to Quiet. Try another microphone in the list, or turn off audio enhancements in your system's sound settings.</p>
+    <p class="muted small">Play a long note: the bar should move and the note should show above.</p>
+
+    <h3>Sound</h3>
+    <label class="field"><span>Volume</span><input id="set-volume" type="range" min="0" max="100"></label>
+
+    <div class="settings-buttons">
+      <button id="set-reset" class="link" type="button">Reset progress…</button>
+      <span id="set-reset-confirm" class="reset-confirm" hidden>
+        Clear all stars and lock levels 2 to 5?
+        <button id="set-reset-yes" class="danger" type="button">Reset</button>
+        <button id="set-reset-no" class="secondary small" type="button">Cancel</button>
+      </span>
+      <button class="primary" value="done">Done</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

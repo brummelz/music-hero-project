@@ -1,0 +1,14 @@
+{
+  "name": "Horn Hero",
+  "short_name": "Horn Hero",
+  "description": "Learn to play the French Horn in tune.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#E9F3FF",
+  "theme_color": "#4338CA",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

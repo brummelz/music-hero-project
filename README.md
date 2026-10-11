@@ -50,6 +50,17 @@ Open Settings by **holding** the gear button for a second. The **Microphone** se
 
 Progress and settings are saved in `%APPDATA%\HornHero\profile.json`.
 
+## Web version (`web/`)
+
+The same game runs in the browser on computers, tablets and phones (spec §6.1). It is plain HTML and JavaScript, with no build step.
+
+- **Online:** https://brummelz.github.io/music-hero-project/ (published from the `html-version` branch by `.github/workflows/pages.yml`). After the first visit it also works offline, and it can be installed ("Add to Home Screen").
+- **Locally:** `npm run serve` (or `python -m http.server 8000 -d web`), then open http://localhost:8000. Browsers allow the microphone only on `https` or `localhost`.
+- **Without an instrument:** add `?sim` to the address. On the gameplay screen hold **Space / ↑ / ↓**, or use the on-screen Flat / In tune / Sharp buttons on a phone.
+- **Tests:** `npm test` (Node 20 or newer, no dependencies). `web/js/core` is a line-by-line port of `core/`; keep the two in step.
+
+The browser asks for the microphone with voice processing turned off. If the Settings live test still fades to "Quiet" on a steady note, the system's own sound processing is filtering it. Pick another microphone in Settings or turn off audio enhancements in the system sound settings.
+
 ## Checks
 
 Run before committing:

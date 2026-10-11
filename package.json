@@ -1,0 +1,11 @@
+{
+  "name": "horn-hero-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Horn Hero in the browser (see web/ and docs/SPECIFICATIONS.md §6.1)",
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"web/tests/*.test.js\"",
+    "serve": "python -m http.server 8000 -d web"
+  }
+}
