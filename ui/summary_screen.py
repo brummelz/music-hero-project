@@ -109,6 +109,8 @@ class SummaryScreen(QWidget):
     @staticmethod
     def _star_reason(stars: int, misses: int) -> str:
         """FR-22/FR-23: say why, so the stars feel earned rather than random."""
+        if misses == 0:
+            return "Amazing! All 3 stars!"
         restarts = "1 restart" if misses == 1 else f"{misses} restarts"
         if stars == 3:
             return f"Amazing! All 3 stars ({restarts})."

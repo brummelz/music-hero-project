@@ -155,6 +155,13 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 4px s
 }
 .cover-button:hover { background: #3B2DA3; }
 .cover-busy { font-size: 3cqh; }
+.cover { grid-template-rows: auto auto; align-content: center; gap: 12px; }
+.cover-note { text-align: center; color: var(--muted); padding: 0 16px; }
+.mic-help-icon { font-size: 2.6rem; width: 72px; height: 72px; border-radius: 50%; background: var(--yellow); display: grid; place-items: center; justify-self: center; font-family: "Segoe UI Symbol", "Apple Symbols", var(--body); }
+.mic-help h2 { text-align: center; }
+.mic-help #mic-help-text { text-align: center; font-size: 1.2rem; }
+.mic-help .primary { min-height: 64px; }
+.grown-up { background: var(--ground); border-radius: 14px; padding: 12px 14px; color: var(--muted); font-size: 0.95rem; }
 .mic-help {
   position: fixed;
   inset: auto 16px 16px 16px;
@@ -332,12 +339,28 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 4px s
 .gate { min-width: 72px; text-align: right; }
 .heard { font-family: var(--display); font-size: 1.3rem; }
 .warning { background: var(--yellow-soft); border-radius: 10px; padding: 8px 12px; }
-.settings-buttons { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
+.settings-buttons {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+  position: sticky; bottom: calc(-1 * clamp(18px, 3vw, 28px)); margin: 8px calc(-1 * clamp(18px, 3vw, 28px)) calc(-1 * clamp(18px, 3vw, 28px));
+  padding: 12px clamp(18px, 3vw, 28px); background: var(--ground); border-top: 2px solid var(--track);
+}
 .reset-confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 
 .toast {
   position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
   background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px;
+}
+
+/* Portrait cover: the painted button would be tiny, so crop the picture just above it and
+   show a full-size Start button underneath. */
+@media (orientation: portrait) {
+  .cover-frame { width: 100vw; aspect-ratio: 1600 / 940; container-type: normal; }
+  .cover-frame img { object-fit: cover; object-position: top; }
+  .cover-button {
+    position: static; display: grid; width: min(88vw, 440px); height: 76px; margin: 18px auto 0;
+    font-size: 1.8rem;
+  }
+  .cover-busy { font-size: 1.3rem; }
 }
 
 /* ---------- Tablet portrait and smaller ---------- */
@@ -354,7 +377,13 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 4px s
   .top-right { grid-area: right; justify-self: end; }
   .target { grid-area: target; }
   .score-pill { min-height: 48px; padding: 0 16px; }
-  .score-pill .slots { display: none; } /* "3 / 10" stays; the dots would not fit */
+  .score-pill { gap: 8px; }
+  .score-pill .score-text { font-size: 1.3rem; }
+  .score-pill .slots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+  .score-pill .slot { width: 14px; height: 14px; }
+  .summary-buttons { flex-direction: column; width: 100%; }
+  .summary-buttons button { width: 100%; }
+  #summary-next { order: -1; }
   .staff-card { padding: 8px 10px; }
   .staff-captions { font-size: 0.8rem; }
   .gauge-chip { padding: 4px 10px; font-size: 0.9rem; }

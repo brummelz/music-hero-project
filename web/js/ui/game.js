@@ -179,11 +179,12 @@ export class GameScreen {
     else if (now < this._tryAgainUntil && state.zone !== Zone.GREEN) feedback = Feedback.TRY_AGAIN;
     this._showFeedback(feedback, now);
 
-    const idle = state.zone === Zone.IDLE && state.holdFraction === 0;
-    const inTune = state.zone === Zone.GREEN || now < this._celebrateUntil;
-    this.staff.setState(state.holdFraction, inTune, idle);
+    // While celebrating, show the completed ring and "+1", not the next hold already counting.
+    const celebrating = now < this._celebrateUntil;
+    const idle = state.zone === Zone.IDLE && state.holdFraction === 0 && !celebrating;
+    this.staff.setState(celebrating ? 1 : state.holdFraction, state.zone === Zone.GREEN || celebrating, idle);
     this.gauge.setReading(state.cents, state.zone);
-    $("feedback-info").textContent = this._infoText(state.zone, frequency, state.holdFraction);
+    $("feedback-info").textContent = celebrating ? "+1 ★" : this._infoText(state.zone, frequency, state.holdFraction);
   }
 
   _shouldCueRestart(session) {

@@ -101,6 +101,7 @@ export class SummaryScreen {
 
 /** FR-22/FR-23: say why, so the stars feel earned rather than random. */
 export function starReason(stars, misses) {
+  if (misses === 0) return "Amazing! All 3 stars!";
   const restarts = misses === 1 ? "1 restart" : `${misses} restarts`;
   if (stars === 3) return `Amazing! All 3 stars (${restarts}).`;
   return `Great playing! You had ${restarts}. Keep it to ${THREE_STAR_MAX_MISSES} or fewer to win all 3 stars.`;
