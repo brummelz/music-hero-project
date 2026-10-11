@@ -1,9 +1,9 @@
-# Publish the web version (web/) to GitHub Pages whenever html-version is pushed.
+# Publish the web version (web/) to GitHub Pages whenever master is pushed.
 name: Deploy web app to GitHub Pages
 
 on:
   push:
-    branches: [html-version]
+    branches: [master]
   workflow_dispatch:
 
 permissions:

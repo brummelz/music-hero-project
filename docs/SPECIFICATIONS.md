@@ -103,7 +103,7 @@ Levels beyond 5 are out of scope for v1. The level table is data (configuration)
 - **NFR-01** End-to-end latency from sound to gauge update should be ≤ 100 ms (target; to be validated).
 - **NFR-02** Detection should be accurate to within ±5 cents for clean sustained tones in the horn's range.
 
-### 6.1 Web version (branch `html-version`)
+### 6.1 Web version (`web/`)
 
 A browser version runs the same rules (FR-01 to FR-25) on computers, tablets and phones. The desktop `.exe` stays the primary target.
 
