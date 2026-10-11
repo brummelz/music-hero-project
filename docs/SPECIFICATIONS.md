@@ -28,7 +28,7 @@ Horn Hero is an offline, educational desktop app for young children learning a m
 ### 3.2 Hold timer and scoring
 
 - **FR-06** The player must hold the **correct note** (correct octave) inside the Green zone for **3.0 continuous seconds** (configurable constant). The counter **starts as soon as the pitch enters the Green zone**, with no extra delay or trigger, and the progress ring fills (with the elapsed time visible) for as long as the pitch stays in range.
-- **FR-07** If the pitch leaves the Green zone before completion, the timer **resets to 0** (default). A configurable "pause" behavior is supported as an alternative.
+- **FR-07** If the pitch leaves the Green zone before completion, the timer **resets to 0** (default, shown as **Hard**). The alternative **pause** behavior (shown as **Easy**) keeps the progress and resumes it when the pitch returns. The child or a grown-up chooses it with the Easy / Hard switch on Screen 1; the choice is a persisted setting (FR-20).
 - **FR-08** Brief detection dropouts shorter than a grace period (default 150 ms) do not count as leaving the zone, so momentary detector glitches don't frustrate the child.
 - **FR-09** Completing the hold awards **1 point**, plays a sound effect, and resets the timer for the next attempt.
 
@@ -77,6 +77,7 @@ Levels beyond 5 are out of scope for v1. The level table is data (configuration)
 
 - **Header:** logo, total stars/score, active instrument indicator (Horn in F).
 - **Mode cards:** Practice (pick Do, Ré, Mi, ...) and Adventure (level map with unlocked levels and star ratings).
+- **Easy / Hard switch (FR-07):** Easy keeps hold progress when the note slips, Hard restarts the hold. Default Hard.
 - **Settings:** microphone sensitivity calibration, transposition profile toggle, audio volume, tuning tolerance (FR-21), reset progress (FR-25).
 
 ### Screen 2: Gameplay
@@ -130,9 +131,9 @@ Decided:
 - Written C4 stays as the lowest starting note for now.
 - Octave-off notes count as wrong (not Green).
 - Single profile per install (FR-25).
+- Pause-on-loss (FR-07) is exposed on Screen 1 as an Easy / Hard switch, not hidden in Settings.
 
 Open:
 
 1. Star thresholds (0–2 / 3–6 / 7+ misses) and the 6-prompt level length are assumptions to validate with real children.
 2. Levels 4 and 5 reach written G5, which is demanding for beginners; confirm or lower the range.
-3. Should the pause-on-loss behavior (FR-07) be exposed in Settings, or remain a developer option?

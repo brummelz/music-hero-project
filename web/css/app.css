@@ -186,6 +186,17 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 4px s
 }
 .header-pills { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .question { text-align: center; font-size: clamp(1.4rem, 3.2vw, 2.4rem); }
+.difficulty { display: grid; justify-items: center; gap: 6px; }
+.difficulty-switch {
+  display: inline-flex; padding: 5px; gap: 4px; border-radius: 999px; background: #fff; border: 3px solid var(--border);
+}
+.difficulty-switch button {
+  min-height: 48px; min-width: 120px; padding: 0 22px; border: 0; border-radius: 999px; background: transparent;
+  font-family: var(--display); font-size: 1.25rem; color: var(--muted);
+}
+.difficulty-switch button[aria-checked="true"] { background: var(--accent); color: #fff; }
+.difficulty-switch button span { font-family: "Segoe UI Symbol", "Apple Symbols", var(--body); }
+.difficulty-hint { text-align: center; }
 .mode-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: var(--gap); }
 .mode-cards .card { padding: var(--pad); display: flex; flex-direction: column; gap: 18px; }
 .card-header { display: flex; align-items: center; gap: 16px; }

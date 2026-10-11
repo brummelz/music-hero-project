@@ -4,7 +4,7 @@ import { Microphone } from "./audio/mic.js";
 import { SimulatedMicrophone } from "./audio/simulator.js";
 import { holdConfig } from "./core/holdTimer.js";
 import { parseLevels } from "./core/levels.js";
-import { makeProfile, withLevelResult, withProgressReset } from "./core/profile.js";
+import { makeProfile, makeSettings, withLevelResult, withProgressReset } from "./core/profile.js";
 import { LevelSession, PRACTICE_NOTES, PracticeSession } from "./core/session.js";
 import { profileByName } from "./core/transpose.js";
 import { ProfileStore } from "./storage/store.js";
@@ -58,6 +58,10 @@ const home = new HomeScreen({
   levels,
   onPractice: (note) => startPractice(note),
   onLevel: (number) => startLevel(number),
+  onHoldMode: (holdMode) => {
+    applySettings(makeSettings({ ...profile.settings, holdMode }));
+    showHome();
+  },
 });
 
 const summary = new SummaryScreen({
@@ -104,7 +108,7 @@ async function applySettings(settings) {
 }
 
 function showHome() {
-  home.refresh(profile.progress, profile.settings.instrument);
+  home.refresh(profile.progress, profile.settings.instrument, profile.settings.holdMode);
   show("home");
 }
 

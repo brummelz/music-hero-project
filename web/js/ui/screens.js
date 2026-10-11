@@ -1,15 +1,29 @@
 // Home (spec Screen 1) and summary (FR-14, FR-17) screens. Ports of ui/home_screen.py and
 // ui/summary_screen.py.
 
+import { HoldMode } from "../core/holdTimer.js";
 import { THREE_STAR_MAX_MISSES } from "../core/levels.js";
 import { isUnlocked, starsFor, totalStars } from "../core/profile.js";
 import { el, renderScore, starRow } from "./widgets.js";
 
 const $ = (id) => document.getElementById(id);
 
+/** FR-07 as the child sees it: Easy keeps hold progress when the note slips, Hard restarts. */
+const DIFFICULTY_HINTS = {
+  [HoldMode.PAUSE]: "Easy: if the note slips, your progress stays.",
+  [HoldMode.RESET]: "Hard: if the note slips, the hold starts again.",
+};
+
 export class HomeScreen {
-  /** @param {{practiceNotes: any[], levels: any[], onPractice: (note: any) => void, onLevel: (n: number) => void}} options */
-  constructor({ practiceNotes, levels, onPractice, onLevel }) {
+  /**
+   * @param {{practiceNotes: any[], levels: any[], onPractice: (note: any) => void,
+   *   onLevel: (n: number) => void, onHoldMode: (mode: string) => void}} options
+   */
+  constructor({ practiceNotes, levels, onPractice, onLevel, onHoldMode }) {
+    this.difficultyButtons = [...document.querySelectorAll(".difficulty-switch [data-hold-mode]")];
+    for (const button of this.difficultyButtons) {
+      button.addEventListener("click", () => onHoldMode(button.dataset.holdMode));
+    }
     this.levels = levels;
     this.onLevel = onLevel;
     this.selected = practiceNotes[0];
@@ -32,7 +46,11 @@ export class HomeScreen {
     this.noteButtons.forEach((button, i) => button.setAttribute("aria-checked", String(this._practiceNotes[i] === this.selected)));
   }
 
-  refresh(progress, instrumentName) {
+  refresh(progress, instrumentName, holdMode) {
+    for (const button of this.difficultyButtons) {
+      button.setAttribute("aria-checked", String(button.dataset.holdMode === holdMode));
+    }
+    $("difficulty-hint").textContent = DIFFICULTY_HINTS[holdMode];
     const max = 3 * this.levels.length;
     $("total-stars").textContent = `★ ${totalStars(progress)} / ${max}`;
     $("total-stars").setAttribute("aria-label", `${totalStars(progress)} of ${max} stars earned`);

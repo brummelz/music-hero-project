@@ -42,6 +42,13 @@
     </div>
   </header>
   <h2 class="question">What do you want to play today?</h2>
+  <div class="difficulty">
+    <div class="difficulty-switch" role="radiogroup" aria-label="Difficulty">
+      <button type="button" role="radio" data-hold-mode="pause"><span aria-hidden="true">🙂&#xFE0E;</span> Easy</button>
+      <button type="button" role="radio" data-hold-mode="reset"><span aria-hidden="true">🔥&#xFE0E;</span> Hard</button>
+    </div>
+    <p id="difficulty-hint" class="muted difficulty-hint"></p>
+  </div>
   <div class="mode-cards">
     <article class="card">
       <div class="card-header"><span class="icon-circle yellow" aria-hidden="true">♪</span>
@@ -123,7 +130,6 @@
       </span>
     </label>
     <label class="field"><span>Instrument</span><select id="set-instrument"></select></label>
-    <label class="check"><input id="set-pause" type="checkbox"> Keep progress when the note slips (pause, don't restart)</label>
 
     <h3>Microphone</h3>
     <label class="field"><span>Microphone</span><select id="set-mic"></select></label>

@@ -3,7 +3,6 @@
 
 import { listMicrophones } from "../audio/mic.js";
 import { PitchTracker } from "../audio/tracker.js";
-import { HoldMode } from "../core/holdTimer.js";
 import { midiLabel } from "../core/notes.js";
 import { makeSettings } from "../core/profile.js";
 import { PROFILES, nearestWrittenNote, profileByName } from "../core/transpose.js";
@@ -43,7 +42,7 @@ export class SettingsDialog {
     $("set-preset").append(option(CUSTOM, CUSTOM));
     for (const profile of PROFILES) $("set-instrument").append(option(profile.name, profile.name));
 
-    for (const id of ["set-preset", "set-custom", "set-instrument", "set-pause", "set-mic", "set-sensitivity", "set-volume"]) {
+    for (const id of ["set-preset", "set-custom", "set-instrument", "set-mic", "set-sensitivity", "set-volume"]) {
       $(id).addEventListener(id === "set-sensitivity" || id === "set-volume" ? "input" : "change", () => this._changed());
     }
     $("set-reset").addEventListener("click", () => {
@@ -69,7 +68,6 @@ export class SettingsDialog {
     $("set-custom").value = String(Math.round(settings.toleranceCents));
     $("set-custom").disabled = preset !== CUSTOM;
     $("set-instrument").value = settings.instrument;
-    $("set-pause").checked = settings.holdMode === HoldMode.PAUSE;
     $("set-sensitivity").value = String(Math.round(settings.micSensitivity * 100));
     $("set-volume").value = String(Math.round(settings.volume * 100));
     await this._fillMicrophones(settings.inputDevice);
@@ -106,7 +104,6 @@ export class SettingsDialog {
       ...this.settings,
       toleranceCents: tolerance,
       instrument: $("set-instrument").value,
-      holdMode: $("set-pause").checked ? HoldMode.PAUSE : HoldMode.RESET,
       inputDevice: this.simulate ? "" : $("set-mic").value,
       micSensitivity: Number($("set-sensitivity").value) / 100,
       volume: Number($("set-volume").value) / 100,
