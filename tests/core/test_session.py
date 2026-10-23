@@ -7,7 +7,7 @@ from core.hold_timer import HoldConfig, HoldEvent, HoldMode
 from core.levels import Level
 from core.notes import Note
 from core.profile import Profile, Progress, Settings
-from core.session import FrameState, GameSession, LevelSession, PracticeSession
+from core.session import PRACTICE_NOTES, FrameState, GameSession, LevelSession, PracticeSession
 from core.transpose import HORN_IN_F
 from core.tuning import Zone
 from storage.store import load_levels
@@ -49,6 +49,10 @@ def test_tc10_silence_gives_idle_and_no_points() -> None:
     states = play(session, 0.0, 5.0, None)
     assert all(s.zone is Zone.IDLE and s.hold_fraction == 0 for s in states)
     assert session.points == 0
+
+
+def test_tc41_fr12_practice_notes_are_natural_c4_to_b4() -> None:
+    assert [n.name for n in PRACTICE_NOTES] == ["C4", "D4", "E4", "F4", "G4", "A4", "B4"]
 
 
 def test_tc17_practice_ends_at_ten_points() -> None:

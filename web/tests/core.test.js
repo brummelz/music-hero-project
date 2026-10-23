@@ -11,7 +11,7 @@ import {
   isUnlocked, makeProfile, makeProgress, makeSettings, starsFor, totalStars, withLevelResult,
   withProgressReset,
 } from "../js/core/profile.js";
-import { LevelSession, PracticeSession } from "../js/core/session.js";
+import { LevelSession, PRACTICE_NOTES, PracticeSession } from "../js/core/session.js";
 import { HORN_IN_F, nearestWrittenNote, profileByName, soundingFrequency } from "../js/core/transpose.js";
 import {
   TOLERANCE_PRESETS, Zone, centsOffset, classify, needlePosition, validateTolerance,
@@ -89,8 +89,15 @@ describe("notes and transposition", () => {
     assert.deepEqual(readJson("../data/levels.json"), readJson("../../resources/levels.json"));
   });
 
+  test("TC-41 practice notes are natural C4 to B4", () => {
+    assert.deepEqual(PRACTICE_NOTES.map((n) => `${n.letter}${n.octave}`), ["C4", "D4", "E4", "F4", "G4", "A4", "B4"]);
+  });
+
   test("TC-22 labels and staff positions", () => {
-    assert.deepEqual(["C4", "D4", "E4"].map((n) => Note.parse(n).label), ["DO / C", "RÉ / D", "MI / E"]);
+    assert.deepEqual(
+      ["C4", "D4", "E4", "F4", "G4", "A4", "B4"].map((n) => Note.parse(n).label),
+      ["DO / C", "RÉ / D", "MI / E", "FA / F", "SOL / G", "LA / A", "SI / B"],
+    );
     assert.equal(Note.parse("E4").staffStep, 0);
     assert.equal(Note.parse("C4").staffStep, -2);
     assert.equal(Note.parse("F5").staffStep, 8);
