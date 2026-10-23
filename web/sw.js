@@ -2,7 +2,7 @@
 // refresh the cache in the background so a new version arrives on the next visit.
 // Bump CACHE when the file list changes.
 
-const CACHE = "horn-hero-v2";
+const CACHE = "horn-hero-v3";
 const FILES = [
   "./", "index.html", "manifest.webmanifest", "css/app.css", "data/levels.json",
   "assets/cover.jpg", "assets/icon-192.png", "assets/icon-512.png",

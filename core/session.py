@@ -14,8 +14,10 @@ from core.transpose import InstrumentProfile, sounding_frequency
 from core.tuning import Zone, cents_offset, classify, validate_tolerance
 
 PRACTICE_GOAL_POINTS = 10
-PRACTICE_NOTES: tuple[Note, ...] = tuple(Note.parse(name) for name in ("C4", "D4", "E4"))
-"""FR-12: practice targets offered initially (Do, Ré, Mi)."""
+PRACTICE_NOTES: tuple[Note, ...] = tuple(
+    Note.parse(name) for name in ("C4", "D4", "E4", "F4", "G4", "A4", "B4")
+)
+"""FR-12: practice targets, the natural notes Do to Si."""
 
 
 @dataclass(frozen=True)

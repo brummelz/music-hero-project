@@ -32,7 +32,7 @@ Traces to [SPECIFICATIONS.md](SPECIFICATIONS.md). All cases are automatable with
 | TC-19 | Level 1 sequence | FR-15, FR-16 | Play Level 1 | 6 prompts, only Do, Ré, Mi; each note at least once; no immediate repeat; level completes after 6 holds |
 | TC-20 | Level unlock | FR-17 | Complete Level 1 | Level 2 unlocked, star rating stored; Level 3 still locked |
 | TC-21 | Persistence | FR-20 | Earn points, change sensitivity, restart app | Progress, unlocked levels, settings restored |
-| TC-22 | Note labels | FR-10, FR-11 | Show each Level 1 note | Correct staff position; labels "DO / C", "RÉ / D", "MI / E" |
+| TC-22 | Note labels | FR-10, FR-11 | Show each Level 1 note and each practice note | Correct staff position; labels "DO / C", "RÉ / D", "MI / E"; practice notes also "FA / F", "SOL / G", "LA / A", "SI / B" |
 | TC-23 | Encouragement | FR-18 | Flat, sharp, in-tune, completed, silence states | Matching message for each |
 | TC-24 | Latency | NFR-01 | Tone onset to gauge update | ≤ 100 ms (target) |
 | TC-25 | Offline packaging | Section 6 | Run the `.exe` with network disabled on a clean Windows machine | App launches and works fully |
@@ -51,6 +51,7 @@ Traces to [SPECIFICATIONS.md](SPECIFICATIONS.md). All cases are automatable with
 | TC-38 | Reset progress | FR-25 | Reset progress: cancel, then confirm | Cancel keeps data; confirm clears progress and stars, only Level 1 unlocked |
 | TC-39 | Counter starts on entering range | FR-06 | Silence, then at t = 2.0 s the correct note enters the Green zone and stays | Timer is 0 until t = 2.0 s, starts at that instant, completes at t = 5.0 s (±1 detection frame), 1 point |
 | TC-40 | Wrong note does not start counter | FR-06 | A different note (not the target, including octave-off) sustained for 5 s | Timer stays 0, no point |
+| TC-41 | Practice note choices | FR-12 | Open Practice mode | Seven choices, in order: written C4, D4, E4, F4, G4, A4, B4 (Do to Si), no sharps or flats |
 
 ## Notes
 

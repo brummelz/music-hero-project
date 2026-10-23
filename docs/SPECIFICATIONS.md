@@ -41,7 +41,7 @@ Horn Hero is an offline, educational desktop app for young children learning a m
 
 ### Mode 1: Single Note Practice
 
-- **FR-12** The user selects one target note (initially Do, Ré, Mi: written C4, D4, E4).
+- **FR-12** The user selects one target note among the natural notes Do, Ré, Mi, Fa, Sol, La, Si (written C4 to B4, no sharps or flats).
 - **FR-13** The staff shows the target note for the whole session.
 - **FR-14** Each completed hold awards 1 point; the session completes at **10 points**, followed by a celebration/summary.
 
@@ -76,7 +76,7 @@ Levels beyond 5 are out of scope for v1. The level table is data (configuration)
 ### Screen 1: Mode and instrument selection
 
 - **Header:** logo, total stars/score, active instrument indicator (Horn in F).
-- **Mode cards:** Practice (pick Do, Ré, Mi, ...) and Adventure (level map with unlocked levels and star ratings).
+- **Mode cards:** Practice (pick one of Do, Ré, Mi, Fa, Sol, La, Si) and Adventure (level map with unlocked levels and star ratings).
 - **Easy / Hard switch (FR-07):** Easy keeps hold progress when the note slips, Hard restarts the hold. Default Hard.
 - **Settings:** microphone sensitivity calibration, transposition profile toggle, audio volume, tuning tolerance (FR-21), reset progress (FR-25).
 
@@ -119,6 +119,10 @@ A browser version runs the same rules (FR-01 to FR-25) on computers, tablets and
 | C4 | Do | 60 | F3 | 53 | 174.61 |
 | D4 | Ré | 62 | G3 | 55 | 196.00 |
 | E4 | Mi | 64 | A3 | 57 | 220.00 |
+| F4 | Fa | 65 | B♭3 | 58 | 233.08 |
+| G4 | Sol | 67 | C4 | 60 | 261.63 |
+| A4 | La | 69 | D4 | 62 | 293.66 |
+| B4 | Si | 71 | E4 | 64 | 329.63 |
 | C5 | Do | 72 | F4 | 65 | 349.23 |
 
 ## 8. Decisions and remaining open questions

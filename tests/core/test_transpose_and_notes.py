@@ -40,7 +40,18 @@ def test_tc29_level_note_frequencies() -> None:
         assert actual == pytest.approx(_SPEC_LEVEL_FREQUENCIES[level["number"]], abs=0.01)
 
 
-@pytest.mark.parametrize(("name", "label"), [("C4", "DO / C"), ("D4", "RÉ / D"), ("E4", "MI / E")])
+@pytest.mark.parametrize(
+    ("name", "label"),
+    [
+        ("C4", "DO / C"),
+        ("D4", "RÉ / D"),
+        ("E4", "MI / E"),
+        ("F4", "FA / F"),
+        ("G4", "SOL / G"),
+        ("A4", "LA / A"),
+        ("B4", "SI / B"),
+    ],
+)
 def test_tc22_note_labels(name: str, label: str) -> None:
     assert Note.parse(name).label == label
 

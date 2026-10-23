@@ -103,7 +103,7 @@ QPushButton#round:hover {{ background: {ACCENT_SOFT}; }}
 
 QPushButton#note {{
     background: white; border: 4px solid {BORDER}; border-radius: 24px;
-    min-height: 130px; font-size: 40px; font-weight: 700;
+    min-height: 100px; font-size: 40px; font-weight: 700;
 }}
 QPushButton#note:hover {{ border-color: {ACCENT_LINE}; }}
 QPushButton#note:checked {{ background: {ACCENT_SOFT}; border-color: {ACCENT}; }}

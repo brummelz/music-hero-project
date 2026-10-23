@@ -9,8 +9,8 @@ import { soundingFrequency } from "./transpose.js";
 import { Zone, centsOffset, classify, validateTolerance } from "./tuning.js";
 
 export const PRACTICE_GOAL_POINTS = 10;
-/** FR-12: practice targets offered initially (Do, Ré, Mi). */
-export const PRACTICE_NOTES = Object.freeze(["C4", "D4", "E4"].map((name) => Note.parse(name)));
+/** FR-12: practice targets, the natural notes Do to Si. */
+export const PRACTICE_NOTES = Object.freeze(["C4", "D4", "E4", "F4", "G4", "A4", "B4"].map((name) => Note.parse(name)));
 
 /**
  * What the gameplay screen shows after one detection frame.

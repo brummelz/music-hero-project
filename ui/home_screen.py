@@ -9,6 +9,7 @@ from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
     QButtonGroup,
     QFrame,
+    QGridLayout,
     QHBoxLayout,
     QLabel,
     QPushButton,
@@ -23,6 +24,9 @@ from core.notes import Note
 from core.profile import Progress
 from ui import theme
 from ui.widgets import HoldButton, StarRow
+
+PRACTICE_GRID_COLUMNS = 4
+PRACTICE_GRID_SPACING = 12
 
 # FR-07: the Easy / Hard switch picks the hold mode.
 _DIFFICULTIES = ((HoldMode.PAUSE, "🙂  Easy"), (HoldMode.RESET, "🔥  Hard"))
@@ -164,8 +168,8 @@ class HomeScreen(QWidget):
         layout.setSpacing(20)
         layout.addLayout(_card_header("♪", theme.YELLOW, "Practice", "Pick one note and play it 10 times."))
 
-        notes_row = QHBoxLayout()
-        notes_row.setSpacing(14)
+        notes_grid = QGridLayout()
+        notes_grid.setSpacing(PRACTICE_GRID_SPACING)
         self._note_group = QButtonGroup(self)
         for index, note in enumerate(self._practice_notes):
             button = QPushButton()
@@ -186,11 +190,11 @@ class HomeScreen(QWidget):
             inner.addWidget(_passive(sub))
             inner.addStretch(1)
             self._note_group.addButton(button, index)
-            notes_row.addWidget(button)
+            notes_grid.addWidget(button, *divmod(index, PRACTICE_GRID_COLUMNS))
         buttons = self._note_group.buttons()
         if buttons:
             buttons[0].setChecked(True)
-        layout.addLayout(notes_row)
+        layout.addLayout(notes_grid)
 
         hint = QLabel("Hold the note steady for 3 seconds to score a point.")
         hint.setWordWrap(True)
